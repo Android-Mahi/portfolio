@@ -1,0 +1,356 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS  (Tailwind v4 @theme — everything keyable here)
+   Material You inspired dark surfaces + Android-green accent.
+   Change --color-accent to re-skin the whole site instantly.
+   ============================================================ */
+@theme {
+  /* Surfaces — tonal elevation, darkest -> lightest */
+  --color-canvas: #0a0a0b;
+  --color-surface-1: #101113;
+  --color-surface-2: #16181b;
+  --color-surface-3: #1d2024;
+  --color-line: #2a2d32;
+
+  /* Text */
+  --color-ink: #f4f5f7;
+  --color-ink-muted: #a7adb7;
+  --color-ink-faint: #6b7280;
+
+  /* Brand — Android green + cool secondary (Material You duotone) */
+  --color-accent: #3ddc84; /* Android green */
+  --color-accent-bright: #6effb0; /* lighter green for gradients */
+  --color-accent-2: #2dd4bf; /* teal */
+  --color-accent-3: #38bdf8; /* sky */
+  --color-accent-glow: rgba(61, 220, 132, 0.45);
+
+  /* Fonts */
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Radii */
+  --radius-card: 20px;
+
+  /* Easing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Custom keyframe animations exposed as Tailwind utilities */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-aurora: aurora 18s ease infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes aurora {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Slow-drifting aurora blobs for the animated background */
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(8vw, 6vh) scale(1.15);
+  }
+  66% {
+    transform: translate(-6vw, 10vh) scale(0.9);
+  }
+}
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-10vw, 8vh) scale(1.2);
+  }
+}
+@keyframes drift-c {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1.05);
+  }
+  50% {
+    transform: translate(9vw, -7vh) scale(0.85);
+  }
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Lenis smooth-scroll disables native smooth; keep fallback for no-JS */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    /* subtle base radial glow behind everything */
+    background-image:
+      radial-gradient(60rem 60rem at 50% -10%, rgba(61, 220, 132, 0.08), transparent 60%),
+      radial-gradient(40rem 40rem at 100% 20%, rgba(56, 189, 248, 0.05), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: #04130a;
+  }
+
+  /* Slim, on-brand scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-canvas);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-surface-3);
+    border-radius: 99px;
+    border: 2px solid var(--color-canvas);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ============================================================
+   COMPONENT UTILITIES
+   ============================================================ */
+@layer components {
+  /* Glassmorphism surface — the signature premium card */
+  .glass {
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0.015)
+    );
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
+      0 20px 50px -20px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Gradient brand text */
+  .text-gradient {
+    background: linear-gradient(
+      120deg,
+      var(--color-accent) 0%,
+      var(--color-accent-2) 50%,
+      var(--color-accent-3) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Animated aurora gradient text (for the hero name) */
+  .text-aurora {
+    background: linear-gradient(
+      120deg,
+      var(--color-accent),
+      var(--color-accent-bright),
+      var(--color-accent-2),
+      var(--color-accent-3),
+      var(--color-accent)
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: var(--animate-aurora);
+  }
+
+  /* Thin accent pill / chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    background: rgba(61, 220, 132, 0.08);
+    border: 1px solid rgba(61, 220, 132, 0.22);
+    color: var(--color-accent);
+  }
+
+  /* Glowing primary button */
+  .btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    color: #04130a;
+    background: linear-gradient(120deg, var(--color-accent), var(--color-accent-bright));
+    box-shadow: 0 8px 30px -8px var(--color-accent-glow);
+    transition: transform 0.25s var(--ease-out-expo), box-shadow 0.25s var(--ease-out-expo);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px -8px var(--color-accent-glow);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    color: var(--color-ink);
+    border: 1px solid var(--color-line);
+    background: rgba(255, 255, 255, 0.02);
+    transition: border-color 0.25s, background 0.25s, transform 0.25s var(--ease-out-expo);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-accent);
+    background: rgba(61, 220, 132, 0.06);
+    transform: translateY(-2px);
+  }
+
+  /* Animated gradient hairline divider */
+  .divider-glow {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent),
+      transparent
+    );
+    opacity: 0.4;
+  }
+
+  /* Cursor-follow spotlight glow for glass cards.
+     Driven by --mx/--my custom props (set in JS) — never touches transform,
+     so it can coexist with the project cards' 3D tilt. */
+  .spotlight {
+    position: relative;
+  }
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      220px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(61, 220, 132, 0.16),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+  /* keep real (in-flow) content above the glow overlay, but never override
+     absolutely-positioned decorative children (e.g. Contact's glow blobs) */
+  .spotlight > *:not(.absolute) {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Animated aurora blob — large, blurred, slow-drifting colour field */
+  .aurora-blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(90px);
+    opacity: 0.22;
+    will-change: transform;
+  }
+
+  /* Faint grid background pattern */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 50%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 50%, transparent 100%);
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY — honour reduced-motion everywhere
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
