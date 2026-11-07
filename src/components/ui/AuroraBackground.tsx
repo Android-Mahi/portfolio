@@ -26,7 +26,7 @@ export function AuroraBackground() {
           width: "40vw",
           height: "40vw",
           background: "var(--color-accent-3)",
-          opacity: 0.16,
+          opacity: 0.10,
           animation: "drift-b 32s ease-in-out infinite",
         }}
       />
@@ -38,7 +38,7 @@ export function AuroraBackground() {
           width: "44vw",
           height: "44vw",
           background: "var(--color-accent-2)",
-          opacity: 0.14,
+          opacity: 0.09,
           animation: "drift-c 30s ease-in-out infinite",
         }}
       />

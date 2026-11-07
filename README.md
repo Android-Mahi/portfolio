@@ -17,14 +17,33 @@ interactive 3D hero — built mobile-first so it stays buttery on a phone.
 | UI motion      | **Framer Motion**                       | Declarative reveals, stagger, card tilt. |
 | Smooth scroll  | **Lenis**                               | Premium inertia scrolling (auto-off for reduced-motion). |
 
-## Run it
+## Mac mini setup
 
-```bash
-npm install      # already done if node_modules exists
-npm run dev      # local dev at http://localhost:5173
-npm run build    # type-check + production build to dist/
-npm run preview  # serve the production build at http://localhost:4173
+Install Git and Node.js 24 LTS, which includes npm. Verify the installation with
+`git --version`, `node --version`, and `npm --version`.
+
+```sh
+mkdir -p ~/StudioProjects
+cd ~/StudioProjects
+git clone https://github.com/Android-Mahi/portfolio.git
+cd portfolio
+npm ci
+npm run dev
 ```
+
+Open [the dev server](http://localhost:5173/) or the URL Vite prints if that
+port is busy. Use **Ctrl+C** to stop the server. `npm ci` installs the versions
+in `package-lock.json`. The local site runs without a Vercel account or an
+environment file.
+
+Check the production build locally with these commands.
+
+```sh
+npm run build
+npm run preview
+```
+
+Open [the production preview](http://localhost:4173/) or the URL Vite prints.
 
 ## ✏️ Make it yours (start here)
 
@@ -52,6 +71,25 @@ Open `src/index.css` and change `--color-accent` (currently Android green
 whole site — buttons, glows, gradients, 3D lighting — follows.
 
 ## Deploy
+
+### Reconnect the existing Vercel deployment
+
+`vercel.json` ships with the repo. `.vercel/` is the ignored link between this
+checkout and the Vercel project. To deploy from the Mac mini, recreate the link
+from the repo folder.
+
+```sh
+npx vercel login
+npx vercel link
+```
+
+Sign in with a Vercel account that can access the existing site. Select the
+account or team that owns it, then link to the existing `mahendran-portfolio`
+project. Run `npx vercel deploy` for a preview, then use
+`npx vercel deploy --prod` when ready to publish. [Vercel CLI guide](https://vercel.com/docs/projects/deploy-from-cli)
+
+For GitHub auto-deploy, check that **Settings → Git** in Vercel points to
+`Android-Mahi/portfolio` and confirm which branch is configured for production. [Vercel for GitHub](https://vercel.com/docs/git/vercel-for-github)
 
 ### Vercel / Netlify (recommended — zero config)
 Push to GitHub and import the repo. Build command `npm run build`, output
